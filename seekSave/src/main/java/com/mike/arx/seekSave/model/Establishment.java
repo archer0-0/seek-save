@@ -15,7 +15,7 @@ public class Establishment {
 	private String postalCode;
 	private String phone;
 	@DBRef
-	private String town;
+	private Town town;
 
 	public Establishment() {
 	}
@@ -68,12 +68,19 @@ public class Establishment {
 		this.phone = phone;
 	}
 
-	public void setTown(String town) {
+	public void setTown(Town town) {
 		this.town = town;
 	}
 
-	public String getTown() {
+	public Town getTown() {
 		return town;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 	@Override
