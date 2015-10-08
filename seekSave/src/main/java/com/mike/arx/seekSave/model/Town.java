@@ -1,11 +1,15 @@
 package com.mike.arx.seekSave.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="towns")
 public class Town{
+	@Id
 	private String id;
+	@Indexed(unique=true)
 	private String name;
 	@DBRef
 	private Country country;
