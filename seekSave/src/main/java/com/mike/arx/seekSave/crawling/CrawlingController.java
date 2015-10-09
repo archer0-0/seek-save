@@ -103,8 +103,7 @@ public class CrawlingController {
 		     */
 		    controller.start(MyCrawler.class, numberOfCrawlers);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.debug(e.getMessage(),e);
 		}
 
 	 

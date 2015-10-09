@@ -1,27 +1,23 @@
 package com.mike.arx.seekSave;
 
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 
-import com.mike.arx.seekSave.crawling.CrawlingController;
-import com.mike.arx.seekSave.crawling.MyCrawler;
 import com.mike.arx.seekSave.daos.CountryDAO;
 import com.mike.arx.seekSave.daos.CountryDAOImpl;
 import com.mike.arx.seekSave.daos.EstablishmentDAO;
 import com.mike.arx.seekSave.daos.EstablishmentDAOImpl;
 import com.mike.arx.seekSave.daos.TownDAO;
 import com.mike.arx.seekSave.daos.TownDAOImpl;
-import com.mike.arx.seekSave.daos.exceptions.DAOException;
-import com.mike.arx.seekSave.model.Country;
-import com.mike.arx.seekSave.model.Establishment;
-import com.mike.arx.seekSave.model.Town;
+import com.mike.arx.seekSave.seeker.qdq.QdqDirector;
 
 /**
  * Hello world!
@@ -39,11 +35,23 @@ public class App {
 		CountryDAO countryDAO = ctx.getBean(CountryDAOImpl.class);
 		TownDAO townDAO = ctx.getBean(TownDAOImpl.class);
 		EstablishmentDAO establishmentDAO = ctx.getBean(EstablishmentDAOImpl.class);
-//		Prueba crawling
-		CrawlingController.start();
+
+		//Prueba Scraping
+//		ParserTest.parse();
+		QdqDirector.seek();
 		
 		
 		
+		
+		
+		
+		
+		
+		
+		
+		
+////	Prueba crawling
+//	CrawlingController.start();
 		
 //		 Pruebas
 //		Country country = new Country("spain");

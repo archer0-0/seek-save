@@ -8,14 +8,11 @@
 			</Pattern>
 		</layout>
 	</appender>
+	
 
 	<logger name="com.mike.arx.seekSave" level="debug"
 		additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
-
-	<root level="error">
-		<appender-ref ref="STDOUT" />
-	</root>
 
 </configuration>
