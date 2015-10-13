@@ -38,7 +38,7 @@ public class App {
 
 		//Prueba Scraping
 //		ParserTest.parse();
-		QdqDirector.seek();
+//		QdqDirector.seek();
 		
 		
 		

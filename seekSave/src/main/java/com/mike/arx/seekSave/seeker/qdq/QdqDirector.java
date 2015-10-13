@@ -12,6 +12,7 @@ import com.mike.arx.seekSave.daos.TownDAO;
 import com.mike.arx.seekSave.daos.TownDAOImpl;
 import com.mike.arx.seekSave.model.Country;
 import com.mike.arx.seekSave.seeker.GenericSeeker;
+import com.mike.arx.seekSave.seeker.SeekException;
 
 public class QdqDirector {
 	private static final String starterSite = "http://es.qdq.com/empresas-restauracion/";
@@ -28,16 +29,22 @@ public class QdqDirector {
 	public void seek(){
 		Country country= new Country();
 		GenericSeeker qdqSeeker= new QdqSeeker();
-		documentOfQdqSite=qdqSeeker.obtainDocumentSite(starterSite);
-		List<String> intermediateUrls=qdqSeeker.obtainURLs(documentOfQdqSite);
-		for (String string : intermediateUrls) {
-			Document documentToOtainWebToScrap=qdqSeeker.obtainDocumentSite(string);
-			List<String> urlsofEstablishmentsWebList=qdqSeeker.obtainUrlListToObtainWebsToScrap(documentToOtainWebToScrap, string);
-			for (String string2 : urlsofEstablishmentsWebList) {
-				Document document2=qdqSeeker.obtainDocumentSite(string2);
-				qdqSeeker.seeker(document2, townDAO, establishmentDAO, country);
+		try {
+			documentOfQdqSite=qdqSeeker.obtainDocumentSite(starterSite);
+			List<String> intermediateUrls=qdqSeeker.obtainURLs(documentOfQdqSite);
+			for (String string : intermediateUrls) {
+				Document documentToOtainWebToScrap=qdqSeeker.obtainDocumentSite(string);
+				List<String> urlsofEstablishmentsWebList=qdqSeeker.obtainUrlListToObtainWebsToScrap(documentToOtainWebToScrap, string);
+				for (String string2 : urlsofEstablishmentsWebList) {
+					Document document2=qdqSeeker.obtainDocumentSite(string2);
+					qdqSeeker.seeker(document2, townDAO, establishmentDAO, country);
+				}
 			}
+		} catch (SeekException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
 	}
 	public void setEstablishmentDAO(EstablishmentDAO establishmentDAO) {
 		this.establishmentDAO = establishmentDAO;

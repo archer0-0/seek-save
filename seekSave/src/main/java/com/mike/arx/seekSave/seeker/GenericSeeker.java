@@ -13,14 +13,16 @@ public interface GenericSeeker {
 	/**
 	 * This method obtains {@link Document} from {@link String} of URL
 	 * @return
+	 * @throws SeekException 
 	 */
-	public abstract Document obtainDocumentSite(String site);
+	public abstract Document obtainDocumentSite(String site) throws SeekException;
 	/**
 	 * This method obtains a list of Url Sites intermediate to obtain the webs to scrap establishments
 	 * @param documentOfQdqSite
 	 * @return
+	 * @throws SeekException 
 	 */
-	public abstract List<String> obtainURLs(Document documentOfQdqSite);
+	public abstract List<String> obtainURLs(Document documentOfQdqSite) throws SeekException;
 	/**
 	 * This method obtains a list of web where there are establishments information
 	 * @param documentToOtainWebToScrap
