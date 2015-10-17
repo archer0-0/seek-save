@@ -1,10 +1,5 @@
 package com.mike.arx.seekSave;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -36,57 +31,13 @@ public class App {
 		TownDAO townDAO = ctx.getBean(TownDAOImpl.class);
 		EstablishmentDAO establishmentDAO = ctx.getBean(EstablishmentDAOImpl.class);
 
-		//Prueba Scraping
-//		ParserTest.parse();
-//		QdqDirector.seek();
+		QdqDirector director= new QdqDirector();
+		director.seek();
 		
 		
 		
 		
 		
 		
-		
-		
-		
-		
-		
-////	Prueba crawling
-//	CrawlingController.start();
-		
-//		 Pruebas
-//		Country country = new Country("spain");
-//		System.out.println("Country before saved: " + country);
-//		try {
-//			countryDAO.save(country);
-//			System.out.println("Country saved1: " + country);
-//			Query searCountryQuery = new Query(Criteria.where("name").is(
-//					"spain"));
-//			Country savedCountry = mongoOperation.findOne(searCountryQuery,
-//					Country.class);
-//			System.out.println("Country saved2: " + savedCountry);
-//			Town testTown = new Town();
-//			testTown.setName("toledo");
-//			testTown.setCountry(savedCountry);
-//			townDAO.save(testTown);
-//			Town savedTown=townDAO.findByName("toledo");
-//			System.out.println("Country of the city: " + savedTown.getCountry());
-//			Establishment testEstablishment= new Establishment();
-//			Establishment testEstablishment2= new Establishment();
-//			testEstablishment.setName("Marisqueria Mari");
-//			testEstablishment.setTown(testTown);
-//			testEstablishment2.setName("Marisqueria Mari2");
-//			testEstablishment2.setTown(testTown);
-//			establishmentDAO.save(testEstablishment);
-//			establishmentDAO.save(testEstablishment2);
-//			List<Establishment> establishments= establishmentDAO.findByTown(savedTown);
-//			for (Establishment establishment : establishments) {
-//				System.out.println("Establishment: "+establishment.toString()+"\n");
-//			}
-//			
-//		} catch (DAOException e) {
-//			logger.debug(e.getMessage(), e);
-//		}
-		
-
 	}
 }

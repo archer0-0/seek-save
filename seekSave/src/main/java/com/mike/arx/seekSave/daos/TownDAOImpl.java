@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import com.mike.arx.seekSave.daos.exceptions.DAOException;
+import com.mike.arx.seekSave.daos.exceptions.DAOTownException;
 import com.mike.arx.seekSave.model.Country;
 import com.mike.arx.seekSave.model.Town;
 @Repository
@@ -21,23 +21,23 @@ public class TownDAOImpl implements TownDAO{
 	MongoOperations operations;
 	public TownDAOImpl(){}
 
-	public void save(Town town) throws DAOException {
+	public void save(Town town) throws DAOTownException {
 		if(town.getId()!=null){
-			throw new  DAOException("Can't save a Town with id: "+town.toString());
+			throw new  DAOTownException("Can't save a Town with id: "+town.toString());
 		}else {
 			try{
 			operations.save(town);
 			logger.debug("New Town saved: "+town.toString());
 			}catch(DuplicateKeyException e){
-				throw new DAOException(e.getMessage(),e);
+				throw new DAOTownException(e.getMessage(),e);
 			}
 		}
 		
 	}
 
-	public void update(Town town) throws DAOException {
+	public void update(Town town) throws DAOTownException {
 		if(town.getId()==null){
-			throw new  DAOException("Can't update a Town without id: "+town.toString());
+			throw new  DAOTownException("Can't update a Town without id: "+town.toString());
 		}else {
 			operations.save(town);
 			logger.debug("Town updated: "+town.toString());

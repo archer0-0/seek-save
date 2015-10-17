@@ -23,7 +23,6 @@
 		<logback.version>1.0.13</logback.version>
 		<slf4j.version>1.7.5</slf4j.version>
 	</properties>
-
 	<dependencies>
 		<!-- Test -->
 		<dependency>
@@ -80,7 +79,6 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.7.2</version>
 		</dependency>
-
 	</dependencies>
 	<build>
 		<resources>
@@ -105,29 +103,38 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
 				</configuration>
 			</plugin>
-
-
-			<!-- Make this jar executable -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.6</version>
 				<configuration>
-					<!-- DO NOT include log4j.properties file in your Jar -->
-					<excludes>
-						<exclude>**/logback.xml</exclude>
-					</excludes>
+					<finalName>
+						${project.artifactId}${project.version}
+					</finalName>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
 					<archive>
 						<manifest>
-							<!-- Jar file entry point -->
 							<mainClass>com.mike.arx.seekSave.App</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
+
 </project>

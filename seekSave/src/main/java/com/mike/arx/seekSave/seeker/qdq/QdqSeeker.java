@@ -13,12 +13,15 @@ import org.slf4j.LoggerFactory;
 
 import com.mike.arx.seekSave.daos.EstablishmentDAO;
 import com.mike.arx.seekSave.daos.TownDAO;
+import com.mike.arx.seekSave.daos.exceptions.DAOEstablishmentException;
 import com.mike.arx.seekSave.daos.exceptions.DAOException;
+import com.mike.arx.seekSave.daos.exceptions.DAOTownException;
 import com.mike.arx.seekSave.model.Country;
 import com.mike.arx.seekSave.model.Establishment;
 import com.mike.arx.seekSave.model.Town;
 import com.mike.arx.seekSave.seeker.GenericSeeker;
 import com.mike.arx.seekSave.seeker.SeekException;
+import com.mike.arx.seekSave.seeker.exceptions.SeekerException;
 
 public class QdqSeeker implements GenericSeeker {
 	private static Logger logger = LoggerFactory.getLogger(QdqSeeker.class);
@@ -65,11 +68,11 @@ public class QdqSeeker implements GenericSeeker {
 
 		while (max < maxAmount) {
 			urlsToSeekList.add(urlToObtainWebToScrap + "pag-" + min + "/rows-"
-					+ 1000 + "/s:/");
+					+ 900 + "/s:/");
 			logger.debug("Add " + urlToObtainWebToScrap + "pag-0/rows-"
 					+ maxAmount + "/s:/" + "to Url to seek");
-			min = min + 1000;
-			max = max + 1000;
+			min = min + 900;
+			max = max + 900;
 		}
 		urlsToSeekList.add(urlToObtainWebToScrap + "pag-" + min + "/rows-"
 				+ maxAmount + "/s:/");
@@ -81,47 +84,49 @@ public class QdqSeeker implements GenericSeeker {
 	}
 
 	@Override
-	public void seeker(Document documentToObtainEstablishments, TownDAO dao,
-			EstablishmentDAO establishmentDAO, Country country) {
-		Elements establisElements = documentToObtainEstablishments.select(
-				"#listadoResultados").select("li.estirar");
-		for (int i = 0; i > establisElements.size(); i++) {
-			Element element = establisElements.get(i);
-			String townName = element.select("h2")
-					.select("itemprop=\"locality\"").text();
-			Town townSaved = null;
-			townSaved = new Town();
-			townSaved.setName(townName);
-			townSaved.setCountry(country);
-			try {
-				dao.save(townSaved);
-
-			} catch (DAOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
-				Establishment establishment = new Establishment();
-				establishment.setName(element.select("itemprop=\"name\"")
-						.text());
-				establishment.setAddress(element.select(
-						"itemprop=\"street-address\"").text());
-				establishment.setPostalCode(element.select(
-						"itemprop=\"postal-code\"").text());
-				establishment.setTown(townSaved);
-				establishment.setWebPage(element.select("itemprop=\"url\"").attr("href"));
-				try {
-					establishmentDAO.save(establishment);
-				} catch (DAOException e) {
-					logger.debug("Problemas guardado el Establishment!");
-				}
-
-			}
-
-			/**
-			 * TODO me he quedado en la creacion del Establishment
-			 */
-
-		}
+	public Elements seekEstablishmentDocumentList(
+			Document documentToObtainEstablishments) {
+		return documentToObtainEstablishments.select("#listadoResultados")
+				.select("li.estirar");
 	}
 
+	@Override
+	public void saveEstablishment(Element establishmentNode, TownDAO townDao,
+			EstablishmentDAO establishmentDAO, Country country)
+			throws SeekerException {
+		try {
+			String townName =establishmentNode.select("span").select("[itemprop=locality]").text();
+			Town townSaved = townDao.findByName(townName);
+			if (townSaved == null) {
+				townSaved = new Town();
+				townSaved.setName(townName);
+				townSaved.setCountry(country);
+				townDao.save(townSaved);
+			}
+			Establishment establishment = new Establishment();
+			establishment.setName(establishmentNode.select("[itemprop=name]")
+					.text());
+			establishment.setAddress(establishmentNode.select(
+					"[itemprop=street-address]").text());
+			establishment.setPostalCode(establishmentNode.select(
+					"[itemprop=postal-code]").text());
+			establishment.setTown(townSaved);
+			establishment.setWebPage(establishmentNode.select(
+					"[itemprop=url]").attr("href"));
+			establishment.setPhone(establishmentNode.select("[itemprop=tel]").text());
+			establishmentDAO.save(establishment);
+			logger.debug("Seeked Establishment Saved!: "
+					+ establishment.toString());
+
+		} catch (DAOEstablishmentException e) {
+			throw new SeekerException(
+					"I can't save establisment. It must be in DB already", e);
+
+		} catch (DAOTownException e) {
+			throw new SeekerException(
+					"Can't save Town. If I have not Town y can't save Establishment",
+					e);
+		}
+
+	}
 }

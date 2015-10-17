@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import com.mike.arx.seekSave.daos.exceptions.DAOException;
+import com.mike.arx.seekSave.daos.exceptions.DAOEstablishmentException;
 import com.mike.arx.seekSave.model.Establishment;
 import com.mike.arx.seekSave.model.Town;
 
@@ -24,9 +24,9 @@ public class EstablishmentDAOImpl implements EstablishmentDAO {
 		this.operations=mongoOperations;
 	}
 
-	public void save(Establishment establishment) throws DAOException {
+	public void save(Establishment establishment) throws DAOEstablishmentException {
 		if(establishment.getId()!=null){
-			throw new DAOException("Can't save Establishment with id: "+establishment.toString());
+			throw new DAOEstablishmentException("Can't save Establishment with id: "+establishment.toString());
 		}else {
 			operations.save(establishment);
 			logger.debug("Establishment saved: "+establishment.toString());
@@ -34,9 +34,9 @@ public class EstablishmentDAOImpl implements EstablishmentDAO {
 		
 	}
 
-	public void update(Establishment establishment) throws DAOException {
+	public void update(Establishment establishment) throws DAOEstablishmentException {
 		if(establishment.getId()==null){
-			throw new DAOException("Can't update Establishment without id: "+establishment.toString());
+			throw new DAOEstablishmentException("Can't update Establishment without id: "+establishment.toString());
 		}else {
 			operations.save(establishment);
 			logger.debug("Establishment updated: "+establishment.toString());

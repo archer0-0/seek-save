@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import com.mike.arx.seekSave.daos.exceptions.DAOException;
+import com.mike.arx.seekSave.daos.exceptions.DAOCountryException;
 import com.mike.arx.seekSave.model.Country;
 @Repository
 public class CountryDAOImpl implements CountryDAO {
@@ -19,25 +19,25 @@ public class CountryDAOImpl implements CountryDAO {
 	public CountryDAOImpl() {
 	}
 
-	public void save(Country country) throws DAOException {
+	public void save(Country country) throws DAOCountryException {
 		if (country.getId() != null) {
-			throw new DAOException("Can't save a Country with id: "
+			throw new DAOCountryException("Can't save a Country with id: "
 					+ country.toString());
 		} else {
 			try{
 			operations.save(country);
 			logger.debug("New Country saved: "+country.toString());
 			}catch(DuplicateKeyException e){
-				throw new DAOException(e.getMessage()
+				throw new DAOCountryException(e.getMessage()
 						+ country.toString(),e);
 			}
 		}
 
 	}
 
-	public void update(Country country) throws DAOException {
+	public void update(Country country) throws DAOCountryException {
 		if (country.getId() == null) {
-			throw new DAOException("Can't update a Country without id: "
+			throw new DAOCountryException("Can't update a Country without id: "
 					+ country.toString());
 		} else {
 			operations.save(country);
