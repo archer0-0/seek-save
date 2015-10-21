@@ -19,6 +19,7 @@
 		<spring.context.version>4.2.1.RELEASE</spring.context.version>
 		<spring.data.mongodb.version>1.8.0.RELEASE</spring.data.mongodb.version>
 		<spring.test.version>4.2.1.RELEASE</spring.test.version>
+		<spring.security.config>4.0.2.RELEASE</spring.security.config>
 		<!-- Logging -->
 		<logback.version>1.0.13</logback.version>
 		<slf4j.version>1.7.5</slf4j.version>
@@ -53,6 +54,11 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-mongodb</artifactId>
 			<version>${spring.data.mongodb.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.security.config}</version>
 		</dependency>
 		<!-- Logback -->
 		<dependency>
@@ -108,33 +114,6 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.6</version>
-				<configuration>
-					<finalName>
-						${project.artifactId}${project.version}
-					</finalName>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<archive>
-						<manifest>
-							<mainClass>com.mike.arx.seekSave.App</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>2.4.1</version>
 				<executions>
@@ -144,6 +123,10 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
+							<!-- Optional Start -->
+							<shadedArtifactAttached>true</shadedArtifactAttached>
+							<shadedClassifierName>jar-with-dependencies</shadedClassifierName>
+							<!-- Optional End -->
 							<transformers>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
@@ -157,11 +140,21 @@
 									implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 									<resource>META-INF/spring.schemas</resource>
 								</transformer>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+									<resource>META-INF/spring.tooling</resource>
+								</transformer>
 							</transformers>
-							<shadedArtifactAttached>true</shadedArtifactAttached>
-							<!-- configures the suffix name for the executable jar here it will 
-								be '<project.artifact>-<project.version>-executable.jar' -->
-							<shadedClassifierName>executable</shadedClassifierName>
+							<filters>
+								<filter>
+									<artifact>*.*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+									</excludes>
+								</filter>
+							</filters>
 						</configuration>
 					</execution>
 				</executions>
