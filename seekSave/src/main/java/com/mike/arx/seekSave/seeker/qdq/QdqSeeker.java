@@ -32,6 +32,9 @@ public class QdqSeeker implements GenericSeeker {
 		try {
 			documentOfQdqSite = Jsoup.connect(site).get();
 			logger.debug("Obtain document from Url: " + site);
+			if(documentOfQdqSite==null){
+				throw new SeekException("Can't obtain Document from the site:"+site);
+			}
 		} catch (IOException e) {
 			throw new SeekException("Attemp to acces to Url : " + site
 					+ " fails\n" + e.getMessage(), e);

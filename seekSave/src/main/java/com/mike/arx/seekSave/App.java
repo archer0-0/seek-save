@@ -12,7 +12,9 @@ import com.mike.arx.seekSave.daos.EstablishmentDAO;
 import com.mike.arx.seekSave.daos.EstablishmentDAOImpl;
 import com.mike.arx.seekSave.daos.TownDAO;
 import com.mike.arx.seekSave.daos.TownDAOImpl;
+import com.mike.arx.seekSave.seeker.GenericSeeker;
 import com.mike.arx.seekSave.seeker.qdq.QdqDirector;
+import com.mike.arx.seekSave.seeker.qdq.QdqSeeker;
 
 /**
  * Hello world!
@@ -23,21 +25,20 @@ public class App {
 
 	public static void main(String[] args) {
 		Logger logger = LoggerFactory.getLogger(CountryDAOImpl.class);
-		ctx = new GenericXmlApplicationContext(
-				"SpringConfig.xml");
+		ctx = new GenericXmlApplicationContext("SpringConfig.xml");
 		MongoOperations mongoOperation = (MongoOperations) ctx
 				.getBean("mongoTemplate");
 		CountryDAO countryDAO = ctx.getBean(CountryDAOImpl.class);
 		TownDAO townDAO = ctx.getBean(TownDAOImpl.class);
-		EstablishmentDAO establishmentDAO = ctx.getBean(EstablishmentDAOImpl.class);
-
-		QdqDirector director= new QdqDirector();
+		EstablishmentDAO establishmentDAO = ctx
+				.getBean(EstablishmentDAOImpl.class);
+		GenericSeeker qdqSeeker = new QdqSeeker();
+		QdqDirector director = new QdqDirector();
+		director.setCountryDAO(countryDAO);
+		director.setTownDAO(townDAO);
+		director.setEstablishmentDAO(establishmentDAO);
+		director.setSeeker(qdqSeeker);
 		director.seek();
-		
-		
-		
-		
-		
-		
+
 	}
 }

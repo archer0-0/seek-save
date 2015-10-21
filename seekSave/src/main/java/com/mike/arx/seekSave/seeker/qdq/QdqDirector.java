@@ -15,6 +15,7 @@ import com.mike.arx.seekSave.daos.EstablishmentDAO;
 import com.mike.arx.seekSave.daos.EstablishmentDAOImpl;
 import com.mike.arx.seekSave.daos.TownDAO;
 import com.mike.arx.seekSave.daos.TownDAOImpl;
+import com.mike.arx.seekSave.daos.exceptions.DAOCountryException;
 import com.mike.arx.seekSave.model.Country;
 import com.mike.arx.seekSave.seeker.GenericSeeker;
 import com.mike.arx.seekSave.seeker.SeekException;
@@ -27,6 +28,7 @@ public class QdqDirector {
 	private TownDAO townDAO=null;
 	private EstablishmentDAO establishmentDAO= null;
 	private CountryDAO countryDAO= null;
+	private GenericSeeker qdqSeeker= null;
 	public QdqDirector(){
 		townDAO= new TownDAOImpl();
 		establishmentDAO= new EstablishmentDAOImpl();
@@ -35,11 +37,13 @@ public class QdqDirector {
 	}
 	public void seek(){
 		Country country=countryDAO.findByName(CountryNames.SPAIN.getCountryName());
-		if(country==null){
-			country= new Country(CountryNames.SPAIN.getCountryName(), 34);
-		}
-		GenericSeeker qdqSeeker= new QdqSeeker();
+		
 		try {
+			if(country==null){
+				logger.debug(CountryNames.SPAIN+" doesn't exist in DB");
+				country= new Country(CountryNames.SPAIN.getCountryName(), 34);
+				countryDAO.save(country);
+			}
 			documentOfQdqSite=qdqSeeker.obtainDocumentSite(starterSite);
 			List<String> intermediateUrls=qdqSeeker.obtainURLs(documentOfQdqSite);
 			for (String string : intermediateUrls) {
@@ -57,7 +61,7 @@ public class QdqDirector {
 					}
 				}
 			}
-		} catch (SeekException e) {
+		} catch (SeekException | DAOCountryException e) {
 			logger.debug(e.getMessage(),e);
 		}
 		
@@ -70,6 +74,9 @@ public class QdqDirector {
 	}
 	public void setCountryDAO(CountryDAO countryDAO) {
 		this.countryDAO = countryDAO;
+	}
+	public void setSeeker(GenericSeeker qdqSeeker) {
+		this.qdqSeeker = qdqSeeker;
 	}
 
 }
