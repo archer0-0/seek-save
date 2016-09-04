@@ -18,7 +18,6 @@ public class Establishment {
 	private String webPage;
 	@Indexed(unique=true)
 	private String contactMail;
-	private String postalCode;
 	private String phone;
 	@DBRef
 	private Town town;
@@ -58,14 +57,6 @@ public class Establishment {
 		this.contactMail = contactMail;
 	}
 
-	public String getPostalCode() {
-		return postalCode;
-	}
-
-	public void setPostalCode(String postalCode) {
-		this.postalCode = postalCode;
-	}
-
 	public String getPhone() {
 		return phone;
 	}
@@ -91,9 +82,10 @@ public class Establishment {
 
 	@Override
 	public String toString() {
-			return "Establishment [id=" + id + ", name=" + name + ", address=" + address + ", "
-					+ "Web page="+webPage+", contact Mail="+contactMail+", postal code="+postalCode+","
-							+ " phone="+phone+",town="+town+"]";
+		return "Establishment [id=" + id + ", name=" + name + ", address=" + address + ", webPage=" + webPage
+				+ ", contactMail=" + contactMail + ", phone=" + phone + ", town=" + town + "]";
 	}
+
+	
 
 }

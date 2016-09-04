@@ -143,7 +143,6 @@ public class EstablishmentDAOImplTest {
 		Establishment establishment= new Establishment();
 		establishment.setName("EStablishmentTest8");
 		establishment.setContactMail("mailTest8");
-		establishment.setPostalCode("1234");
 		operations.save(establishment);
 		List<Establishment> savedEstablishment=establishmentDao.findByPostalCode("1234");
 		assertFalse(savedEstablishment.isEmpty());

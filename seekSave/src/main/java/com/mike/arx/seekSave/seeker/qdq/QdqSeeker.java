@@ -111,8 +111,6 @@ public class QdqSeeker implements GenericSeeker {
 					.text());
 			establishment.setAddress(establishmentNode.select(
 					"[itemprop=street-address]").text());
-			establishment.setPostalCode(establishmentNode.select(
-					"[itemprop=postal-code]").text());
 			establishment.setTown(townSaved);
 			establishment.setWebPage(establishmentNode.select(
 					"[itemprop=url]").attr("href"));
